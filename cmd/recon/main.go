@@ -9,7 +9,8 @@ import (
 
 func main() {
 	s := scanner.NewScanner([]string{"node_modules"})
-	repos, err := s.Scan("../")
+	//TODO: Need to get a flag. or by default go from current root where the recon is triggered.
+	repos, err := s.Scan("./")
 	if err != nil {
 		log.Fatal(err)
 	}
