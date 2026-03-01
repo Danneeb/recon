@@ -1,0 +1,91 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build and Release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: Set version metadata
+        id: meta
+        run: |
+          echo "VERSION=${GITHUB_REF_NAME}" >> "$GITHUB_OUTPUT"
+          echo "COMMIT=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
+          echo "DATE=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$GITHUB_OUTPUT"
+
+      - name: Build binaries
+        env:
+          VERSION: ${{ steps.meta.outputs.VERSION }}
+          COMMIT: ${{ steps.meta.outputs.COMMIT }}
+          DATE: ${{ steps.meta.outputs.DATE }}
+          LDFLAGS: >-
+            -s -w
+            -X main.version=${{ steps.meta.outputs.VERSION }}
+            -X main.commit=${{ steps.meta.outputs.COMMIT }}
+            -X main.date=${{ steps.meta.outputs.DATE }}
+        run: |
+          mkdir -p dist
+
+          TARGETS=(
+            "linux/amd64"
+            "linux/arm64"
+            "darwin/amd64"
+            "darwin/arm64"
+            "windows/amd64"
+            "windows/arm64"
+          )
+
+          for target in "${TARGETS[@]}"; do
+            OS="${target%/*}"
+            ARCH="${target#*/}"
+            OUT="recon"
+            [[ "$OS" == "windows" ]] && OUT="recon.exe"
+
+            GOOS="$OS" GOARCH="$ARCH" go build \
+              -trimpath \
+              -ldflags "$LDFLAGS" \
+              -o "dist/${OUT}" \
+              ./cmd/recon
+
+            ARCHIVE="dist/recon_${VERSION}_${OS}_${ARCH}"
+            if [[ "$OS" == "windows" ]]; then
+              zip "${ARCHIVE}.zip" -j "dist/${OUT}"
+            else
+              tar -czf "${ARCHIVE}.tar.gz" -C dist "${OUT}"
+            fi
+            rm "dist/${OUT}"
+          done
+
+      - name: Generate checksums
+        working-directory: dist
+        run: sha256sum * > checksums.txt
+
+      - name: Extract changelog for this version
+        id: changelog
+        run: |
+          VERSION="${{ steps.meta.outputs.VERSION }}"
+          awk "/^## \[${VERSION#v}\]/{found=1; next} found && /^## \[/{exit} found{print}" CHANGELOG.md \
+            > /tmp/release_notes.md
+          echo "notes_file=/tmp/release_notes.md" >> "$GITHUB_OUTPUT"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          body_path: ${{ steps.changelog.outputs.notes_file }}
+          files: dist/*

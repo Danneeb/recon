@@ -19,7 +19,7 @@ func NewScanner(ignore []string) *Scanner {
 func (s *Scanner) Scan(root string) ([]*repo.Repo, error) {
 	var gitRepos []*repo.Repo
 
-	filepath.WalkDir(root, func(path string, d fs.DirEntry, err error) error {
+	if err := filepath.WalkDir(root, func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
 			return err
 		}
@@ -47,6 +47,8 @@ func (s *Scanner) Scan(root string) ([]*repo.Repo, error) {
 		}
 
 		return nil
-	})
+	}); err != nil {
+		return nil, err
+	}
 	return gitRepos, nil
 }
