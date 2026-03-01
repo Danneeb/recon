@@ -15,7 +15,7 @@ A fast, single-binary CLI tool that scans your local filesystem for git reposito
 ### macOS
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/Danneeb/recon/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/Danneeb/recon/master/install.sh | bash
 ```
 
 Detects Intel or Apple Silicon automatically and installs to `/usr/local/bin`.
@@ -23,7 +23,7 @@ Detects Intel or Apple Silicon automatically and installs to `/usr/local/bin`.
 ### Linux
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/Danneeb/recon/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/Danneeb/recon/master/install.sh | bash
 ```
 
 Installs to `/usr/local/bin` (uses `sudo` if needed). Supports x86-64 and arm64.
@@ -98,7 +98,7 @@ make test
 
 ```bash
 make release VERSION=1.2.3
-git push origin main v1.2.3
+git push origin master v1.2.3
 ```
 
 This renames the `[Unreleased]` section in `CHANGELOG.md` to `[1.2.3] - YYYY-MM-DD`, commits, and creates the tag locally. Pushing the tag triggers the release workflow which builds all platform binaries and publishes the GitHub Release.
