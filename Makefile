@@ -42,6 +42,6 @@ endif
 	git tag v$(VERSION)
 	@echo ""
 	@echo "Release v$(VERSION) prepared. To publish:"
-	@echo "  git push origin main v$(VERSION)"
+	@echo "  git push origin master v$(VERSION)"
 
 .DEFAULT_GOAL := build
