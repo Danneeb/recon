@@ -9,11 +9,6 @@ on:
       - "web/templates/**"
       - ".github/workflows/ci.yml"
   pull_request:
-    paths:
-      - "**.go"
-      - "go.mod"
-      - "web/templates/**"
-      - ".github/workflows/ci.yml"
   workflow_dispatch:
 
 jobs:
