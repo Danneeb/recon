@@ -1,7 +1,6 @@
 package scanner
 
 import (
-	"fmt"
 	"io/fs"
 	"path/filepath"
 	"recon/internal/repo"
@@ -25,10 +24,17 @@ func (s *Scanner) Scan(root string) ([]*repo.Repo, error) {
 			return err
 		}
 
+		if d.IsDir() {
+			for _, ignored := range s.ignore {
+				if d.Name() == ignored {
+					return fs.SkipDir
+				}
+			}
+		}
+
 		if d.IsDir() && d.Name() == ".git" {
 			repoPath := filepath.Dir(path)
 			r, err := git.PlainOpen(repoPath)
-
 			if err != nil {
 				return err
 			}
@@ -36,9 +42,7 @@ func (s *Scanner) Scan(root string) ([]*repo.Repo, error) {
 			if err != nil {
 				return err
 			}
-			gitRepos = append(gitRepos, &repo.Repo{Name: filepath.Base(repoPath), Path: repoPath, Branch: string(branch.Name().Short())})
-
-			fmt.Println(*r)
+			gitRepos = append(gitRepos, &repo.Repo{Name: filepath.Base(repoPath), Path: repoPath, Branch: branch.Name().Short()})
 			return fs.SkipDir
 		}
 
