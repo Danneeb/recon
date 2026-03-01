@@ -9,8 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.0] - 2026-03-01
 
-## [0.1.0] - 2026-03-01
-
 ### Added
 - Recursive git repo discovery via `filepath.WalkDir` with configurable ignore list
 - go-git integration for extracting branch metadata per repo
