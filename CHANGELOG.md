@@ -7,7 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.1.1] - 2026-03-01
+## [0.1.2] - 2026-03-02
+
+### Fixed
+- Skip repos where HEAD cannot be resolved (e.g. empty repos) instead of aborting the scan
+- Repo names no longer show as `.` when scanning from the current directory
 
 ## [0.1.1] - 2026-03-01
 
