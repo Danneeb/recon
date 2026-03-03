@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-03-03
+
+### Added
+- Detail view with stats dashboard: commit activity bar chart (full history), commits by contributor, commits by day of week
+- Tabbed UI on detail page — Overview (stats) and Commit Log tabs
+- `GetRepoDetail` function using go-git to extract full commit history, contributors, and activity breakdowns
+- `BarEntry` type for pre-computed chart data (label, count, percentage)
+- Tests for `GetRepoDetail` covering commit count, contributors, date formatting, author ranking, monthly range, and day-of-week bucketing
+
 ## [0.1.2] - 2026-03-02
 
 ### Fixed

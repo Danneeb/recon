@@ -16,5 +16,6 @@ func New(repos []*repo.Repo) *Server {
 func (s *Server) Start(addr string) error {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", s.handleList)
+	mux.HandleFunc("/repo", s.handleDetailView)
 	return http.ListenAndServe(addr, mux)
 }

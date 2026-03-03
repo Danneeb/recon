@@ -5,6 +5,7 @@ import (
 	"log"
 	"path/filepath"
 	"recon/internal/repo"
+	"slices"
 
 	"github.com/go-git/go-git/v5"
 )
@@ -26,10 +27,8 @@ func (s *Scanner) Scan(root string) ([]*repo.Repo, error) {
 		}
 
 		if d.IsDir() {
-			for _, ignored := range s.ignore {
-				if d.Name() == ignored {
-					return fs.SkipDir
-				}
+			if slices.Contains(s.ignore, d.Name()) {
+				return fs.SkipDir
 			}
 		}
 

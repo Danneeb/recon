@@ -1,31 +1,44 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" class="dark">
-<head>
-  <meta charset="UTF-8">
-  <title>recon</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = { darkMode: 'class' }
+  <head>
+    <meta charset="UTF-8" />
+    <title>recon</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = { darkMode: "class" };
 
-    function toggleTheme() {
-      document.documentElement.classList.toggle('dark')
-    }
-  </script>
-</head>
-<body class="bg-white text-gray-900 dark:bg-gray-950 dark:text-gray-100 min-h-screen transition-colors duration-200">
-  {{template "nav" .}}
+      function toggleTheme() {
+        document.documentElement.classList.toggle("dark");
+      }
+    </script>
+  </head>
+  <body
+    class="bg-white text-gray-900 dark:bg-gray-950 dark:text-gray-100 min-h-screen transition-colors duration-200"
+  >
+    {{template "nav" .}}
 
-  <main class="max-w-7xl mx-auto px-8">
-    <h1 class="text-2xl font-bold mb-6">Repositories</h1>
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-      {{range .Repos}}
-      <a href="#" class="bg-gray-100 dark:bg-gray-800 rounded p-5 flex flex-col gap-2 border border-transparent hover:border-indigo-500 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors cursor-pointer">
-        <div class="font-semibold text-gray-900 dark:text-white text-lg">{{.Name}}</div>
-        <div class="text-xs text-indigo-500 dark:text-indigo-400">{{.Branch}}</div>
-        <div class="text-xs text-gray-400 dark:text-gray-500 break-all mt-auto">{{.Path}}</div>
-      </a>
-      {{end}}
-    </div>
-  </main>
-</body>
+    <main class="max-w-7xl mx-auto px-8">
+      <h1 class="text-2xl font-bold mb-6">Repositories</h1>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        {{range .Repos}}
+        <a
+          href="/repo?path={{.Path}}"
+          class="bg-gray-100 dark:bg-gray-800 rounded p-5 flex flex-col gap-2 border border-transparent hover:border-indigo-500 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors cursor-pointer"
+        >
+          <div class="font-semibold text-gray-900 dark:text-white text-lg">
+            {{.Name}}
+          </div>
+          <div class="text-xs text-indigo-500 dark:text-indigo-400">
+            {{.Branch}}
+          </div>
+          <div
+            class="text-xs text-gray-400 dark:text-gray-500 break-all mt-auto"
+          >
+            {{.Path}}
+          </div>
+        </a>
+        {{end}}
+      </div>
+    </main>
+  </body>
 </html>
