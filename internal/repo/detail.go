@@ -46,7 +46,7 @@ func GetRepoDetail(repo *Repo, path string) (*RepoDetail, error) {
 		return nil, err
 	}
 
-	iter, err := r.Log(&git.LogOptions{From: ref.Hash()})
+	iter, err := r.Log(&git.LogOptions{From: ref.Hash(), Order: git.LogOrderCommitterTime})
 	if err != nil {
 		return nil, err
 	}
