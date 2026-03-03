@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = { darkMode: "class" };
+
+      function toggleTheme() {
+        document.documentElement.classList.toggle("dark");
+      }
+
+      function showTab(name) {
+        document.querySelectorAll("[data-tab]").forEach((el) => {
+          el.classList.toggle("hidden", el.dataset.tab !== name);
+        });
+        document.querySelectorAll("[data-tab-btn]").forEach((el) => {
+          const active = el.dataset.tabBtn === name;
+          el.classList.toggle("border-indigo-500", active);
+          el.classList.toggle("text-indigo-500", active);
+          el.classList.toggle("dark:text-indigo-400", active);
+          el.classList.toggle("border-transparent", !active);
+          el.classList.toggle("text-gray-500", !active);
+          el.classList.toggle("dark:text-gray-400", !active);
+        });
+      }
+    </script>
+    <title>{{.Name}} — recon</title>
+  </head>
+  <body
+    class="bg-white text-gray-900 dark:bg-gray-950 dark:text-gray-100 min-h-screen transition-colors duration-200"
+  >
+    {{template "nav" .}}
+
+    <main class="max-w-7xl mx-auto px-8 pb-16">
+      <!-- Header -->
+      <div class="mb-6">
+        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
+          {{.Name}}
+        </h1>
+        <p class="text-sm text-gray-400 dark:text-gray-500 mt-1 break-all">
+          {{.Path}}
+        </p>
+      </div>
+
+      <!-- Stat cards -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <div class="bg-gray-100 dark:bg-gray-800 rounded p-5">
+          <div class="text-xs text-gray-400 dark:text-gray-500 mb-1">
+            Branch
+          </div>
+          <div
+            class="text-lg font-semibold text-indigo-500 dark:text-indigo-400"
+          >
+            {{.Branch}}
+          </div>
+        </div>
+        <div class="bg-gray-100 dark:bg-gray-800 rounded p-5">
+          <div class="text-xs text-gray-400 dark:text-gray-500 mb-1">
+            Commits
+          </div>
+          <div class="text-lg font-semibold">{{.CommitCount}}</div>
+        </div>
+        <div class="bg-gray-100 dark:bg-gray-800 rounded p-5">
+          <div class="text-xs text-gray-400 dark:text-gray-500 mb-1">
+            Contributors
+          </div>
+          <div class="text-lg font-semibold">{{len .Contributors}}</div>
+        </div>
+        <div class="bg-gray-100 dark:bg-gray-800 rounded p-5">
+          <div class="text-xs text-gray-400 dark:text-gray-500 mb-1">
+            Last commit
+          </div>
+          <div class="text-sm font-semibold">
+            {{if .LastCommitDate}}{{.LastCommitDate}}{{else}}—{{end}}
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="border-b border-gray-200 dark:border-gray-800 mb-8">
+        <div class="flex gap-6">
+          <button
+            data-tab-btn="overview"
+            onclick="showTab('overview')"
+            class="pb-3 text-sm font-medium border-b-2 border-indigo-500 text-indigo-500 dark:text-indigo-400 transition-colors"
+          >
+            Overview
+          </button>
+          <button
+            data-tab-btn="commits"
+            onclick="showTab('commits')"
+            class="pb-3 text-sm font-medium border-b-2 border-transparent text-gray-500 dark:text-gray-400 transition-colors"
+          >
+            Commit log
+          </button>
+        </div>
+      </div>
+
+      <!-- Overview tab -->
+      <div data-tab="overview">
+        <!-- Commit activity by month -->
+        <div class="bg-gray-100 dark:bg-gray-800 rounded p-6 mb-6">
+          <h2
+            class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-6"
+          >
+            Commit activity — last 12 months
+          </h2>
+          <div class="flex items-end gap-1.5" style="height: 120px">
+            {{range .CommitsByMonth}}
+            <div
+              class="flex-1 flex flex-col items-center justify-end gap-1 h-full"
+            >
+              <div
+                class="w-full bg-indigo-500 dark:bg-indigo-600 rounded-t transition-all"
+                style="height: {{.Pct}}%;"
+                title="{{.Count}} commits"
+              ></div>
+              <span class="text-xs text-gray-400 dark:text-gray-500"
+                >{{.Label}}</span
+              >
+            </div>
+            {{end}}
+          </div>
+        </div>
+
+        <!-- Contributors + Day of week -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- By contributor -->
+          <div class="bg-gray-100 dark:bg-gray-800 rounded p-6">
+            <h2
+              class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-5"
+            >
+              By contributor
+            </h2>
+            <div class="flex flex-col gap-3">
+              {{range .CommitsByAuthor}}
+              <div class="flex items-center gap-3">
+                <span
+                  class="text-xs text-gray-500 dark:text-gray-400 w-28 truncate text-right shrink-0"
+                  >{{.Label}}</span
+                >
+                <div
+                  class="flex-1 h-4 bg-gray-200 dark:bg-gray-700 rounded overflow-hidden"
+                >
+                  <div
+                    class="h-4 bg-indigo-500 dark:bg-indigo-600 rounded transition-all"
+                    style="width: {{.Pct}}%;"
+                  ></div>
+                </div>
+                <span
+                  class="text-xs text-gray-400 dark:text-gray-500 w-8 text-right shrink-0"
+                  >{{.Count}}</span
+                >
+              </div>
+              {{end}}
+            </div>
+          </div>
+
+          <!-- By day of week -->
+          <div class="bg-gray-100 dark:bg-gray-800 rounded p-6">
+            <h2
+              class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-5"
+            >
+              By day of week
+            </h2>
+            <div class="flex flex-col gap-3">
+              {{range .CommitsByDay}}
+              <div class="flex items-center gap-3">
+                <span
+                  class="text-xs text-gray-500 dark:text-gray-400 w-8 shrink-0"
+                  >{{.Label}}</span
+                >
+                <div
+                  class="flex-1 h-4 bg-gray-200 dark:bg-gray-700 rounded overflow-hidden"
+                >
+                  <div
+                    class="h-4 bg-indigo-400 dark:bg-indigo-500 rounded transition-all"
+                    style="width: {{.Pct}}%;"
+                  ></div>
+                </div>
+                <span
+                  class="text-xs text-gray-400 dark:text-gray-500 w-8 text-right shrink-0"
+                  >{{.Count}}</span
+                >
+              </div>
+              {{end}}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Commit log tab -->
+      <div data-tab="commits" class="hidden">
+        <div
+          class="divide-y divide-gray-200 dark:divide-gray-800 rounded border border-gray-200 dark:border-gray-800"
+        >
+          {{range .Commits}}
+          <div class="flex items-start gap-4 px-5 py-3">
+            <span
+              class="font-mono text-xs text-gray-400 dark:text-gray-500 mt-0.5 shrink-0"
+              >{{slice .Hash 0 7}}</span
+            >
+            <span class="text-sm flex-1 truncate">{{.Message}}</span>
+            <span class="text-xs text-gray-400 dark:text-gray-500 shrink-0"
+              >{{.Author}}</span
+            >
+            <span class="text-xs text-gray-400 dark:text-gray-500 shrink-0"
+              >{{.Date}}</span
+            >
+          </div>
+          {{end}}
+        </div>
+      </div>
+    </main>
+  </body>
+</html>
