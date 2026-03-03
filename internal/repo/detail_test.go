@@ -12,10 +12,10 @@ import (
 )
 
 type commitSpec struct {
+	when    time.Time
 	author  string
 	email   string
 	message string
-	when    time.Time
 }
 
 func makeRepoWithCommits(t *testing.T, specs []commitSpec) *Repo {
@@ -33,7 +33,7 @@ func makeRepoWithCommits(t *testing.T, specs []commitSpec) *Repo {
 
 	filePath := filepath.Join(dir, "file.txt")
 	for i, spec := range specs {
-		if err := os.WriteFile(filePath, []byte(fmt.Sprintf("content %d", i)), 0644); err != nil {
+		if err = os.WriteFile(filePath, []byte(fmt.Sprintf("content %d", i)), 0644); err != nil {
 			t.Fatal(err)
 		}
 		if _, err = w.Add("file.txt"); err != nil {

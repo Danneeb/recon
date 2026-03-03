@@ -27,12 +27,12 @@ type RepoDetail struct {
 	*Repo
 	Commits         []Commit
 	Contributors    []string
-	CommitCount     int
 	LastCommitDate  string
 	ReadMePath      string
 	CommitsByMonth  []BarEntry
 	CommitsByAuthor []BarEntry
 	CommitsByDay    []BarEntry
+	CommitCount     int
 }
 
 func GetRepoDetail(repo *Repo, path string) (*RepoDetail, error) {

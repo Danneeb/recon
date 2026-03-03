@@ -43,5 +43,7 @@ func (s *Server) handleDetailView(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	tmpl.ExecuteTemplate(w, "detailView.html", data)
+	if err := tmpl.ExecuteTemplate(w, "detailView.html", data); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
 }
