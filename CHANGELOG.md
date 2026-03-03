@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-03-03
+
+### Fixed
+- Commit activity bar chart now scrolls horizontally for repos with long histories instead of compressing bars
+
 ## [0.2.0] - 2026-03-03
 
 ### Added

@@ -105,12 +105,13 @@
           <h2
             class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-6"
           >
-            Commit activity — last 12 months
+            Commit activity
           </h2>
-          <div class="flex items-end gap-1.5" style="height: 120px">
+          <div class="overflow-x-auto">
+          <div class="flex items-end gap-1.5 min-w-max" style="height: 120px">
             {{range .CommitsByMonth}}
             <div
-              class="flex-1 flex flex-col items-center justify-end gap-1 h-full"
+              class="flex flex-col items-center justify-end gap-1 h-full w-8"
             >
               <div
                 class="w-full bg-indigo-500 dark:bg-indigo-600 rounded-t transition-all"
@@ -122,6 +123,7 @@
               >
             </div>
             {{end}}
+          </div>
           </div>
         </div>
 
