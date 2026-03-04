@@ -207,13 +207,16 @@ func TestGetRepoDetailCommitsByDay(t *testing.T) {
 	if len(detail.CommitsByDay) != 7 {
 		t.Fatalf("expected 7 day entries, got %d", len(detail.CommitsByDay))
 	}
-	if detail.CommitsByDay[0].Label != "Sun" {
-		t.Errorf("expected first entry Sun, got %q", detail.CommitsByDay[0].Label)
+	if detail.CommitsByDay[0].Label != "Mon" {
+		t.Errorf("expected first entry Mon, got %q", detail.CommitsByDay[0].Label)
 	}
 	if detail.CommitsByDay[0].Count != 1 {
-		t.Errorf("expected Sunday count 1, got %d", detail.CommitsByDay[0].Count)
+		t.Errorf("expected Monday count 1, got %d", detail.CommitsByDay[0].Count)
 	}
-	if detail.CommitsByDay[1].Count != 1 {
-		t.Errorf("expected Monday count 1, got %d", detail.CommitsByDay[1].Count)
+	if detail.CommitsByDay[6].Label != "Sun" {
+		t.Errorf("expected last entry Sun, got %q", detail.CommitsByDay[6].Label)
+	}
+	if detail.CommitsByDay[6].Count != 1 {
+		t.Errorf("expected Sunday count 1, got %d", detail.CommitsByDay[6].Count)
 	}
 }

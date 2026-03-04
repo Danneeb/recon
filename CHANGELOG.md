@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-03-04
+
+### Added
+- Live search/filter input on the By contributor chart — filters rows instantly as you type
+
+### Changed
+- By contributor list now shows all contributors instead of capping at 10
+- By contributor list is now vertically scrollable instead of expanding the page
+- Day of week chart now starts on Monday and ends on Sunday
+
 ## [0.3.0] - 2026-03-04
 
 ### Added
