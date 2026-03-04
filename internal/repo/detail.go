@@ -114,13 +114,12 @@ func GetRepoDetail(repo *Repo, path string) (*RepoDetail, error) {
 	sort.Slice(authorsSorted, func(i, j int) bool {
 		return authorsSorted[i].v > authorsSorted[j].v
 	})
-	n := min(len(authorsSorted), 10)
 	maxAuthor := 1
 	if len(authorsSorted) > 0 {
 		maxAuthor = authorsSorted[0].v
 	}
-	authorEntries := make([]BarEntry, n)
-	for i := range authorEntries {
+	authorEntries := make([]BarEntry, len(authorsSorted))
+	for i := range authorsSorted {
 		authorEntries[i] = BarEntry{
 			Label: authorsSorted[i].k,
 			Count: authorsSorted[i].v,
@@ -128,8 +127,9 @@ func GetRepoDetail(repo *Repo, path string) (*RepoDetail, error) {
 		}
 	}
 
-	// Commits by day of week
-	dayLabels := []string{"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"}
+	// Commits by day of week (Mon–Sun)
+	dayOrder := []time.Weekday{time.Monday, time.Tuesday, time.Wednesday, time.Thursday, time.Friday, time.Saturday, time.Sunday}
+	dayLabels := []string{"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"}
 	maxDay := 1
 	for _, d := range dayCounts {
 		if d > maxDay {
@@ -137,11 +137,11 @@ func GetRepoDetail(repo *Repo, path string) (*RepoDetail, error) {
 		}
 	}
 	dayEntries := make([]BarEntry, 7)
-	for i, label := range dayLabels {
+	for i, wd := range dayOrder {
 		dayEntries[i] = BarEntry{
-			Label: label,
-			Count: dayCounts[i],
-			Pct:   dayCounts[i] * 100 / maxDay,
+			Label: dayLabels[i],
+			Count: dayCounts[wd],
+			Pct:   dayCounts[wd] * 100 / maxDay,
 		}
 	}
 

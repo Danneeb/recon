@@ -11,6 +11,13 @@
         document.documentElement.classList.toggle("dark");
       }
 
+      function filterContributors(q) {
+        const term = q.toLowerCase();
+        document.querySelectorAll("#contributors-list [data-author]").forEach((el) => {
+          el.classList.toggle("hidden", !el.dataset.author.toLowerCase().includes(term));
+        });
+      }
+
       function showTab(name) {
         document.querySelectorAll("[data-tab]").forEach((el) => {
           el.classList.toggle("hidden", el.dataset.tab !== name);
@@ -136,9 +143,15 @@
             >
               By contributor
             </h2>
-            <div class="flex flex-col gap-3">
+            <input
+              type="text"
+              placeholder="Filter contributors…"
+              oninput="filterContributors(this.value)"
+              class="w-full mb-4 px-3 py-1.5 text-sm rounded bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 border-none outline-none"
+            />
+            <div id="contributors-list" class="flex flex-col gap-3 overflow-y-auto max-h-64">
               {{range .CommitsByAuthor}}
-              <div class="flex items-center gap-3">
+              <div class="flex items-center gap-3" data-author="{{.Label}}">
                 <span
                   class="text-xs text-gray-500 dark:text-gray-400 w-28 truncate text-right shrink-0"
                   >{{.Label}}</span
