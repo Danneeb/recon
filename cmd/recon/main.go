@@ -16,8 +16,8 @@ func main() {
 	}
 
 	fmt.Printf("found %d repos\n", len(repos))
-	fmt.Println("serving at \033]8;;http://localhost:8080\033\\http://localhost:8080\033]8;;\033\\")
+	fmt.Println("serving at \033]8;;http://localhost:8484\033\\http://localhost:8484\033]8;;\033\\")
 
 	srv := server.New(repos)
-	log.Fatal(srv.Start(":8080"))
+	log.Fatal(srv.Start(":8484"))
 }
