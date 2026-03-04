@@ -36,7 +36,7 @@ func runServe(args []string) {
 	fs := flag.NewFlagSet("serve", flag.ExitOnError)
 	root := fs.String("root", ".", "root directory to scan for git repos")
 	port := fs.String("port", "8484", "port to listen on")
-	fs.Parse(args)
+	_ = fs.Parse(args)
 
 	fmt.Printf("\n  recon %s\n", version)
 	fmt.Println("  ────────────────────────────")
@@ -62,7 +62,7 @@ func runServe(args []string) {
 func runScan(args []string) {
 	fs := flag.NewFlagSet("scan", flag.ExitOnError)
 	root := fs.String("root", ".", "root directory to scan for git repos")
-	fs.Parse(args)
+	_ = fs.Parse(args)
 
 	repos, err := scanner.NewScanner([]string{"node_modules"}).Scan(*root)
 	if err != nil {
