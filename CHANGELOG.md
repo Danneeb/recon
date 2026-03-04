@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-03-04
+
+### Added
+- CLI subcommands: `recon scan` to print discovered repos, `recon version` to print build info
+- `--root` flag to set the scan root directory (defaults to current directory)
+- `--port` flag to set the server port (defaults to 8484)
+- Running `recon` with no arguments starts the server with defaults — no subcommand needed
+- Startup banner showing version, commit, build date, root, and port
+- `version`, `commit`, and `date` build variables injected via `-ldflags` (populated by `make build` and the release workflow)
+
+### Changed
+- README updated to reflect actual implemented features and correct CLI usage
+
 ## [0.2.3] - 2026-03-04
 
 ### Fixed

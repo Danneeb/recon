@@ -6,27 +6,19 @@ A fast, single-binary CLI tool that scans your local filesystem for git reposito
 
 - Recursively discovers all git repositories from a configurable root
 - Browsable list view with repo summaries
-- Detail view per repo: branch, last commit, remote URL, rendered README
+- Detail view per repo: branch, last commit, commit activity, contributors
 - Zero runtime dependencies — single binary, pure Go
 - Cross-platform: macOS, Linux, Windows
 
 ## Installation
 
-### macOS
+### macOS / Linux
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/Danneeb/recon/master/install.sh | bash
 ```
 
-Detects Intel or Apple Silicon automatically and installs to `/usr/local/bin`.
-
-### Linux
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/Danneeb/recon/master/install.sh | bash
-```
-
-Installs to `/usr/local/bin` (uses `sudo` if needed). Supports x86-64 and arm64.
+Detects architecture automatically and installs to `/usr/local/bin`.
 
 ### Windows
 
@@ -62,22 +54,22 @@ Extract the archive and place the binary somewhere on your `PATH`.
 
 ```bash
 # Scan repos under the current directory and start the UI
-recon serve
+recon
 
 # Scan from a specific root
-recon serve --root /code
+recon --root /code
+
+# Use a custom port (default: 8484)
+recon --port 9090
 
 # Just scan and print discovered repos (no server)
 recon scan --root /code
 
-# Change the port (default: 7474)
-recon serve --port 8484
-
 # Print version info
-recon --version
+recon version
 ```
 
-Open [http://localhost:7474](http://localhost:7474) in your browser after starting the server.
+Open [http://localhost:8484](http://localhost:8484) in your browser after starting the server.
 
 ## Building from source
 
@@ -85,7 +77,7 @@ Open [http://localhost:7474](http://localhost:7474) in your browser after starti
 git clone https://github.com/Danneeb/recon.git
 cd recon
 make build
-./bin/recon --version
+./bin/recon version
 ```
 
 Run tests:
