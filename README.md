@@ -71,7 +71,7 @@ recon serve --root /code
 recon scan --root /code
 
 # Change the port (default: 7474)
-recon serve --port 8080
+recon serve --port 8484
 
 # Print version info
 recon --version
