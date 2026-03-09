@@ -37,7 +37,8 @@ func (s *Server) handleDetailView(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	data, err := repo.GetRepoDetail(found, path)
+	branch := r.URL.Query().Get("branch")
+	data, err := repo.GetRepoDetail(found, path, branch)
 	if err != nil {
 		http.NotFound(w, r)
 		return

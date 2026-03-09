@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-03-09
+
+### Added
+- Branch dropdown on the detail view — select any local branch to view its commit history and stats
+
 ## [0.4.0] - 2026-03-04
 
 ### Added
