@@ -5,6 +5,7 @@ import (
 	"time"
 
 	git "github.com/go-git/go-git/v5"
+	"github.com/go-git/go-git/v5/plumbing"
 	"github.com/go-git/go-git/v5/plumbing/object"
 )
 
@@ -25,26 +26,55 @@ type BarEntry struct {
 
 type RepoDetail struct {
 	*Repo
-	Commits         []Commit
-	Contributors    []string
 	LastCommitDate  string
 	ReadMePath      string
+	Commits         []Commit
+	Contributors    []string
 	CommitsByMonth  []BarEntry
 	CommitsByAuthor []BarEntry
 	CommitsByDay    []BarEntry
+	Branches        []string
 	CommitCount     int
 }
 
-func GetRepoDetail(repo *Repo, path string) (*RepoDetail, error) {
+func GetRepoDetail(repo *Repo, path, branch string) (*RepoDetail, error) {
 	r, err := git.PlainOpen(path)
 	if err != nil {
 		return nil, err
 	}
 
-	ref, err := r.Head()
+	// Collect all local branches.
+	branchIter, err := r.Branches()
 	if err != nil {
 		return nil, err
 	}
+	var branches []string
+	_ = branchIter.ForEach(func(ref *plumbing.Reference) error {
+		branches = append(branches, ref.Name().Short())
+		return nil
+	})
+
+	var ref *plumbing.Reference
+	if branch != "" {
+		ref, err = r.Reference(plumbing.NewBranchReferenceName(branch), true)
+		if err != nil {
+			// Fall back to HEAD if branch not found.
+			ref, err = r.Head()
+			if err != nil {
+				return nil, err
+			}
+			branch = ref.Name().Short()
+		}
+	} else {
+		ref, err = r.Head()
+		if err != nil {
+			return nil, err
+		}
+		branch = ref.Name().Short()
+	}
+
+	// Override the repo's Branch field to reflect the selected branch.
+	selectedRepo := &Repo{Name: repo.Name, Path: repo.Path, Branch: branch}
 
 	iter, err := r.Log(&git.LogOptions{From: ref.Hash(), Order: git.LogOrderCommitterTime})
 	if err != nil {
@@ -91,7 +121,7 @@ func GetRepoDetail(repo *Repo, path string) (*RepoDetail, error) {
 	months := make([]BarEntry, numMonths)
 	maxMonth := 1
 	for i := 0; i < numMonths; i++ {
-		t := now.AddDate(0, -(numMonths-1-i), 0)
+		t := now.AddDate(0, -(numMonths - 1 - i), 0)
 		count := monthCounts[t.Format("2006-01")]
 		months[i] = BarEntry{Label: t.Format("Jan '06"), Count: count}
 		if count > maxMonth {
@@ -151,7 +181,7 @@ func GetRepoDetail(repo *Repo, path string) (*RepoDetail, error) {
 	}
 
 	return &RepoDetail{
-		Repo:            repo,
+		Repo:            selectedRepo,
 		Commits:         commits,
 		Contributors:    contributors,
 		CommitCount:     len(commits),
@@ -159,5 +189,6 @@ func GetRepoDetail(repo *Repo, path string) (*RepoDetail, error) {
 		CommitsByMonth:  months,
 		CommitsByAuthor: authorEntries,
 		CommitsByDay:    dayEntries,
+		Branches:        branches,
 	}, nil
 }

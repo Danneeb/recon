@@ -56,7 +56,7 @@ func makeRepoWithCommits(t *testing.T, specs []commitSpec) *Repo {
 
 func TestGetRepoDetailInvalidPath(t *testing.T) {
 	r := &Repo{Name: "missing", Path: "/nonexistent/path", Branch: "main"}
-	_, err := GetRepoDetail(r, r.Path)
+	_, err := GetRepoDetail(r, r.Path, "")
 	if err == nil {
 		t.Error("expected error for invalid path, got nil")
 	}
@@ -70,7 +70,7 @@ func TestGetRepoDetailCommitCount(t *testing.T) {
 		{author: "Alice", email: "alice@example.com", message: "third", when: now},
 	})
 
-	detail, err := GetRepoDetail(r, r.Path)
+	detail, err := GetRepoDetail(r, r.Path, "")
 	if err != nil {
 		t.Fatalf("GetRepoDetail: %v", err)
 	}
@@ -90,7 +90,7 @@ func TestGetRepoDetailContributors(t *testing.T) {
 		{author: "Alice", email: "alice@example.com", message: "a2", when: now},
 	})
 
-	detail, err := GetRepoDetail(r, r.Path)
+	detail, err := GetRepoDetail(r, r.Path, "")
 	if err != nil {
 		t.Fatalf("GetRepoDetail: %v", err)
 	}
@@ -105,7 +105,7 @@ func TestGetRepoDetailLastCommitDate(t *testing.T) {
 		{author: "Alice", email: "alice@example.com", message: "commit", when: when},
 	})
 
-	detail, err := GetRepoDetail(r, r.Path)
+	detail, err := GetRepoDetail(r, r.Path, "")
 	if err != nil {
 		t.Fatalf("GetRepoDetail: %v", err)
 	}
@@ -121,7 +121,7 @@ func TestGetRepoDetailCommitDateFormat(t *testing.T) {
 		{author: "Alice", email: "alice@example.com", message: "commit", when: when},
 	})
 
-	detail, err := GetRepoDetail(r, r.Path)
+	detail, err := GetRepoDetail(r, r.Path, "")
 	if err != nil {
 		t.Fatalf("GetRepoDetail: %v", err)
 	}
@@ -140,7 +140,7 @@ func TestGetRepoDetailCommitsByAuthor(t *testing.T) {
 		{author: "Bob", email: "bob@example.com", message: "b1", when: now},
 	})
 
-	detail, err := GetRepoDetail(r, r.Path)
+	detail, err := GetRepoDetail(r, r.Path, "")
 	if err != nil {
 		t.Fatalf("GetRepoDetail: %v", err)
 	}
@@ -167,7 +167,7 @@ func TestGetRepoDetailCommitsByMonth(t *testing.T) {
 		{author: "Alice", email: "alice@example.com", message: "new", when: thisMonth},
 	})
 
-	detail, err := GetRepoDetail(r, r.Path)
+	detail, err := GetRepoDetail(r, r.Path, "")
 	if err != nil {
 		t.Fatalf("GetRepoDetail: %v", err)
 	}
@@ -200,7 +200,7 @@ func TestGetRepoDetailCommitsByDay(t *testing.T) {
 		{author: "Alice", email: "alice@example.com", message: "sun", when: sunday},
 	})
 
-	detail, err := GetRepoDetail(r, r.Path)
+	detail, err := GetRepoDetail(r, r.Path, "")
 	if err != nil {
 		t.Fatalf("GetRepoDetail: %v", err)
 	}
