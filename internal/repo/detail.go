@@ -26,15 +26,15 @@ type BarEntry struct {
 
 type RepoDetail struct {
 	*Repo
-	Commits         []Commit
-	Contributors    []string
 	LastCommitDate  string
 	ReadMePath      string
+	Commits         []Commit
+	Contributors    []string
 	CommitsByMonth  []BarEntry
 	CommitsByAuthor []BarEntry
 	CommitsByDay    []BarEntry
-	CommitCount     int
 	Branches        []string
+	CommitCount     int
 }
 
 func GetRepoDetail(repo *Repo, path, branch string) (*RepoDetail, error) {
@@ -121,7 +121,7 @@ func GetRepoDetail(repo *Repo, path, branch string) (*RepoDetail, error) {
 	months := make([]BarEntry, numMonths)
 	maxMonth := 1
 	for i := 0; i < numMonths; i++ {
-		t := now.AddDate(0, -(numMonths-1-i), 0)
+		t := now.AddDate(0, -(numMonths - 1 - i), 0)
 		count := monthCounts[t.Format("2006-01")]
 		months[i] = BarEntry{Label: t.Format("Jan '06"), Count: count}
 		if count > maxMonth {
